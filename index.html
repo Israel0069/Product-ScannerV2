@@ -299,27 +299,19 @@
             URL.revokeObjectURL(url);
         }
 
-        function saveToSession() {
-            if (scannedProducts.length === 0) {
-                alert('No products to save.');
-                return;
-            }
+ function saveToSession() {
+    if (scannedProducts.length === 0) {
+        alert('No products to save.');
+        return;
+    }
 
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'save_products.php', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        alert('Products saved to session successfully.');
-                    } else {
-                        alert('Failed to save products.');
-                    }
-                }
-            };
+    // Create a query string from the scanned products
+    const queryString = encodeURIComponent(JSON.stringify(scannedProducts));
 
-            xhr.send(JSON.stringify(scannedProducts)); // Send the scanned products to the server
-        }
+    // Redirect to save_products.php with the query string
+    window.location.href = `save_products.php?data=${queryString}`;
+}
+
 
         function speak(text) {
             const msg = new SpeechSynthesisUtterance(text);
