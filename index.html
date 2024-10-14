@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Scanner / Reader</title>
     <script src="html5-qrcode.min.js"></script>
-     <style>
+    <style>
         body {
             display: flex;
             justify-content: center;
@@ -146,7 +146,7 @@
 </head>
 <body>
     <div class="container"><br><br>
-        <h1 style="color: #4B5A20;">BERNA Qr-Scanner</h1>
+        <h1 style="color: #4B5A20;">BERNA QR-Scanner</h1>
         <p style="margin-top: -10px;">for<strong style="color: #787D12;"> Product</p>
         <div class="row">
             <div class="col">
@@ -251,7 +251,7 @@
         function copyToClipboard() {
             let resultText = "";
             scannedProducts.forEach(product => {
-                 resultText += `Product: ${product.product_name}, Price: ₱${parseFloat(product.price).toFixed(2)}\n\n`; // Adding an extra newline
+                resultText += `Product: ${product.product_name}, Price: ₱${parseFloat(product.price).toFixed(2)}\n\n`; // Adding an extra newline
             });
            
             // Create a temporary input to copy text to clipboard
@@ -289,32 +289,41 @@
         }
 
         function downloadProductList() {
-            const productData = scannedProducts.map(product => `Product: ${product.product_name}, Price: ₱${parseFloat(product.price).toFixed(2)}`).join("\n");
+            const productData = scannedProducts.map(product => `Product: ${product.product_name}, Price: ₱${parseFloat(product.price).toFixed(2)}`).join('\n');
             const blob = new Blob([productData], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'scanned_products.txt';
-            link.click();
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'scanned_products.txt';
+            a.click();
+            URL.revokeObjectURL(url);
         }
 
         function saveToSession() {
-            // Send the scanned products array to the server using AJAX
+            if (scannedProducts.length === 0) {
+                alert('No products to save.');
+                return;
+            }
+
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'save_to_session.php', true);
+            xhr.open('POST', 'save_products.php', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    alert('Scanned products saved to session successfully!');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        alert('Products saved to session successfully.');
+                    } else {
+                        alert('Failed to save products.');
+                    }
                 }
             };
-            xhr.send(JSON.stringify({ scannedProducts: scannedProducts, totalPrice: totalPrice }));
+
+            xhr.send(JSON.stringify(scannedProducts)); // Send the scanned products to the server
         }
 
-        function speak(message) {
-            const synth = window.speechSynthesis;
-            const utterance = new SpeechSynthesisUtterance(message);
-            synth.speak(utterance);
+        function speak(text) {
+            const msg = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(msg);
         }
     </script>
 </body>
