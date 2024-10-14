@@ -147,7 +147,7 @@
 <body>
     <div class="container"><br><br>
         <h1 style="color: #4B5A20;">BERNA QR-Scanner</h1>
-        <p style="margin-top: -10px;">for<strong style="color: #787D12;"> Product</p>
+        <p style="margin-top: -10px;">for <strong style="color: #787D12;">Product</strong></p>
         <div class="row">
             <div class="col">
                 <div id="my-qr-reader"></div>
@@ -155,9 +155,7 @@
             <div class="col">
                 <h4>SCAN RESULT</h4>
                 <div id="result">Result Here</div>
-                <button onclick="copyToClipboard()">Proceed</button>
                 <button onclick="printReceipt()">Print Receipt</button>
-                <button onclick="downloadProductList()">Download</button>
                 <button onclick="saveToSession()">Save to Session</button> <!-- New Button -->
                 <h4>Total Price</h4>
                 <div id="total-price">0.00</div>
@@ -205,6 +203,10 @@
         let isProcessing = false; // Variable to control scan delay
         let scannedProducts = []; // Array to store scanned products
 
+        // Get the store_name from the URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const storeName = urlParams.get('store_name') || 'DefaultStoreName'; // Replace with the actual store name variable
+
         function onScanSuccess(qrCodeMessage) {
             if (isProcessing) return; // Ignore scans during the delay
             isProcessing = true;
@@ -248,23 +250,6 @@
         );
         html5QrcodeScanner.render(onScanSuccess, onScanError);
 
-        function copyToClipboard() {
-            let resultText = "";
-            scannedProducts.forEach(product => {
-                resultText += `Product: ${product.product_name}, Price: ₱${parseFloat(product.price).toFixed(2)}\n\n`; // Adding an extra newline
-            });
-           
-            // Create a temporary input to copy text to clipboard
-            const tempInput = document.createElement('input');
-            document.body.appendChild(tempInput);
-            tempInput.value = resultText;
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-
-            alert('Result and total price copied to clipboard!');
-        }
-
         function printReceipt() {
             // Copy the scanned products to the receipt section
             const receiptTable = document.querySelector('#receipt-table tbody');
@@ -288,31 +273,18 @@
             document.getElementById('receipt').style.display = 'none';
         }
 
-        function downloadProductList() {
-            const productData = scannedProducts.map(product => `Product: ${product.product_name}, Price: ₱${parseFloat(product.price).toFixed(2)}`).join('\n');
-            const blob = new Blob([productData], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'scanned_products.txt';
-            a.click();
-            URL.revokeObjectURL(url);
+        function saveToSession() {
+            if (scannedProducts.length === 0) {
+                alert('No products to save.');
+                return;
+            }
+
+            // Create a query string from the scanned products
+            const queryString = encodeURIComponent(JSON.stringify(scannedProducts));
+
+            // Redirect to teller_Addcart with the dynamic store name and product data
+            window.location.href = `teller_Addcart?store_name=${storeName}&data=${queryString}`; 
         }
-
-function saveToSession() {
-    if (scannedProducts.length === 0) {
-        alert('No products to save.');
-        return;
-    }
-
-    // Create a query string from the scanned products
-    const queryString = encodeURIComponent(JSON.stringify(scannedProducts));
-
-    // Redirect to teller_Addcart with the store name and product data
-    window.location.href = `http://192.168.100.70:8000/teller_Addcart?store_name=Berna&data=${queryString}`; 
-}
-
-
 
         function speak(text) {
             const msg = new SpeechSynthesisUtterance(text);
