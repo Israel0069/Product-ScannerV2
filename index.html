@@ -299,7 +299,7 @@
             URL.revokeObjectURL(url);
         }
 
- function saveToSession() {
+function saveToSession() {
     if (scannedProducts.length === 0) {
         alert('No products to save.');
         return;
@@ -308,9 +308,10 @@
     // Create a query string from the scanned products
     const queryString = encodeURIComponent(JSON.stringify(scannedProducts));
 
-    // Redirect to save_products.php with the query string
-    window.location.href = `http://192.168.100.70:8000/save_products.php?data=${queryString}`;
+    // Redirect to teller_Addcart with the store name and product data
+    window.location.href = `http://192.168.100.70:8000/teller_Addcart?store_name=${storeName}&data=${queryString}`; 
 }
+
 
 
         function speak(text) {
