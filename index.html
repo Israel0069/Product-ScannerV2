@@ -283,7 +283,7 @@
             const queryString = encodeURIComponent(JSON.stringify(scannedProducts));
 
             // Redirect to teller_Addcart with the dynamic store name and product data
-            window.location.href = `Location: http://192.168.100.70:8000/teller_Addcart?data=$queryString`; 
+            window.location.href = `http://192.168.100.70:8000/teller_Addcart?store_name=${encodeURIComponent(storeName)}&data=${queryString}`;
         }
 
         function speak(text) {
