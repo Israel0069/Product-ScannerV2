@@ -156,7 +156,7 @@
                 <h4>SCAN RESULT</h4>
                 <div id="result">Result Here</div>
                 <button onclick="printReceipt()">Print Receipt</button>
-                <button onclick="saveToSession()">Save to Session</button> <!-- New Button -->
+                <button onclick="saveToSession()">Proceedings</button> <!-- New Button -->
                 <h4>Total Price</h4>
                 <div id="total-price">0.00</div>
             </div>
@@ -283,7 +283,7 @@
             const queryString = encodeURIComponent(JSON.stringify(scannedProducts));
 
             // Redirect to teller_Addcart with the dynamic store name and product data
-            window.location.href = `teller_Addcart?store_name=${storeName}&data=${queryString}`; 
+            window.location.href = `Location: teller_Addcart?data=$queryString`; 
         }
 
         function speak(text) {
