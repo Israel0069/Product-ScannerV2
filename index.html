@@ -309,7 +309,7 @@
     const queryString = encodeURIComponent(JSON.stringify(scannedProducts));
 
     // Redirect to save_products.php with the query string
-    window.location.href = `save_products.php?data=${queryString}`;
+    window.location.href = `http://192.168.100.70:8000/save_products.php?data=${queryString}`;
 }
 
 
