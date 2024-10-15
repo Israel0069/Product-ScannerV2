@@ -168,6 +168,7 @@
                 <thead>
                     <tr>
                         <th>Product Name</th>
+                        <th>Store Name</th> <!-- Added Store Name column -->
                         <th>Price</th>
                     </tr>
                 </thead>
@@ -183,11 +184,12 @@
 
     <!-- Receipt Section -->
     <div id="receipt">
-        <h2>Order</h2>
+        <h2>Order-Berna</h2>
         <table id="receipt-table">
             <thead>
                 <tr>
                     <th>Product Name</th>
+                    <th>Store Name</th> <!-- Added Store Name column -->
                     <th>Price</th>
                 </tr>
             </thead>
@@ -213,15 +215,15 @@
 
             try {
                 const qrData = JSON.parse(qrCodeMessage);
-                const { product_name, price } = qrData;
+                const { product_name, price, store_name } = qrData; // Get store_name from QR data
 
                 totalPrice += parseFloat(price);
-                scannedProducts.push({ product_name, price });
+                scannedProducts.push({ product_name, price, store_name }); // Include store_name in scanned products
 
                 // Add product to the table
                 const productTable = document.querySelector('#product-table tbody');
                 const newRow = document.createElement('tr');
-                newRow.innerHTML = `<td>${product_name}</td><td>₱${parseFloat(price).toFixed(2)}</td>`;
+                newRow.innerHTML = `<td>${product_name}</td><td>${store_name}</td><td>₱${parseFloat(price).toFixed(2)}</td>`; // Display store_name
                 productTable.appendChild(newRow);
 
                 // Update the total price
@@ -229,7 +231,7 @@
                 document.getElementById('total-price-input').value = `Total Price: ₱${totalPrice.toFixed(2)}`;
 
                 // Voice feedback
-                speak(`Scanned product: ${product_name}, Price: ₱${price}`);
+                speak(`Scanned product: ${product_name}, Price: ₱${price}, Store: ${store_name}`);
 
             } catch (error) {
                 document.getElementById('result').innerHTML = `<span class="result">Invalid QR Code Data</span>`;
@@ -256,7 +258,7 @@
             receiptTable.innerHTML = ''; // Clear previous content
             scannedProducts.forEach(product => {
                 const newRow = document.createElement('tr');
-                newRow.innerHTML = `<td>${product.product_name}</td><td>₱${parseFloat(product.price).toFixed(2)}</td>`;
+                newRow.innerHTML = `<td>${product.product_name}</td><td>${product.store_name}</td><td>₱${parseFloat(product.price).toFixed(2)}</td>`; // Include store_name in the receipt
                 receiptTable.appendChild(newRow);
             });
 
@@ -280,15 +282,17 @@
             }
 
             // Create a query string from the scanned products
-            const queryString = encodeURIComponent(JSON.stringify(scannedProducts));
+            const productData = scannedProducts.map(product => {
+                return `product_name=${encodeURIComponent(product.product_name)}&store_name=${encodeURIComponent(product.store_name)}&price=${encodeURIComponent(product.price)}`;
+            }).join('&');
 
-            // Redirect to teller_Addcart with the dynamic store name and product data
-            window.location.href = `http://192.168.100.70:8000/teller_Addcart?store_name=${encodeURIComponent(storeName)}&data=${queryString}`;
+            // Redirect with the product data as URL parameters
+            window.location.href = `payment.php?${productData}`;
         }
 
         function speak(text) {
-            const msg = new SpeechSynthesisUtterance(text);
-            window.speechSynthesis.speak(msg);
+            const speech = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(speech);
         }
     </script>
 </body>
