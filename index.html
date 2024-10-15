@@ -275,7 +275,7 @@
             document.getElementById('receipt').style.display = 'none';
         }
 
-      function saveToSession() {
+     function saveToSession() {
     if (scannedProducts.length === 0) {
         alert('No products to save.');
         return;
@@ -289,6 +289,7 @@
     // Redirect with the product data as URL parameters
     window.location.href = `http://192.168.100.70:8000/teller_Addcart?${productData}`; // Use a single ?
 }
+
 
 
         function speak(text) {
