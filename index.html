@@ -147,7 +147,7 @@
 <body>
     <div class="container"><br><br>
         <h1 style="color: #4B5A20;">BERNA QR-Scanner</h1>
-        <p style="margin-top: -10px;">for <strong style="color: #787D12;">Productx</strong></p>
+        <p style="margin-top: -10px;">for <strong style="color: #787D12;">Productyss</strong></p>
         <div class="row">
             <div class="col">
                 <div id="my-qr-reader"></div>
@@ -285,9 +285,13 @@ function saveToSession() {
         return `product_name[${index}]=${encodeURIComponent(product.product_name)}&store_name[${index}]=${encodeURIComponent(product.store_name)}&price[${index}]=${encodeURIComponent(product.price)}`;
     }).join('&');
 
+    // Display the product data in an alert before redirecting
+    alert("Product Data: " + productData);
+
     // Redirect with the product data as URL parameters
     window.location.href = `http://192.168.100.70:8000/teller_Addcart?${productData}`;
 }
+
 
 
 
