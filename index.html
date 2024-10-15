@@ -288,8 +288,7 @@ const productData = scannedProducts.map((product, index) => {
 
 
     // Redirect with the product data as URL parameters
-    window.location.href = `http://192.168.100.70:8000/teller_Addcart?product_name[0]=Mais&store_name[0]=Berna&price[0]=7000&product_name[1]=Rice&store_name[1]=StoreA&price[1]=2500
-`; 
+    window.location.href = `http://192.168.100.70:8000/teller_Addcart?${productData}`; 
 }
 
 
