@@ -156,7 +156,7 @@
                 <h4>SCAN RESULT</h4>
                 <div id="result">Result Here</div>
                 <button onclick="printReceipt()">Print Receipt</button>
-                <button onclick="saveToSession()">Proceedings</button> <!-- New Button -->
+                <button onclick="saveToSession()">Proceed</button> <!-- New Button -->
                 <h4>Total Price</h4>
                 <div id="total-price">0.00</div>
             </div>
@@ -281,13 +281,14 @@
         return;
     }
 
- const productData = scannedProducts.map((product, index) => {
+const productData = scannedProducts.map((product, index) => {
     return `product_name[${index}]=${encodeURIComponent(product.product_name)}&store_name[${index}]=${encodeURIComponent(product.store_name)}&price[${index}]=${encodeURIComponent(product.price)}`;
 }).join('&');
 
 
+
     // Redirect with the product data as URL parameters
-    window.location.href = `http://192.168.100.70:8000/teller_Addcart?${productData}`; // Use a single ?
+    window.location.href = `http://192.168.100.70:8000/teller_Addcart?${productData}`; 
 }
 
 
