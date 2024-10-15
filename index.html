@@ -252,34 +252,48 @@
         );
         html5QrcodeScanner.render(onScanSuccess, onScanError);
 
-        function saveToSession() {
-            if (scannedProducts.length === 0) {
-                alert('No products to save.');
-                return;
-            }
-
-            // Create a query string from the scanned products
-            const productData = scannedProducts.map(product => {
-                return `product_name=${encodeURIComponent(product.product_name)}&store_name=${encodeURIComponent(product.store_name)}&price=${encodeURIComponent(product.price)}`;
-            }).join('&');
-
-            // Redirect with the product data as URL parameters
-            window.location.href = `http://192.168.100.70:8000/teller_Addcart?${productData}`; // Use a single ?
-        }
-
         function printReceipt() {
-            const receiptTableBody = document.querySelector('#receipt-table tbody');
-            receiptTableBody.innerHTML = ''; // Clear existing rows
-
-            // Populate the receipt with scanned products
+            // Copy the scanned products to the receipt section
+            const receiptTable = document.querySelector('#receipt-table tbody');
+            receiptTable.innerHTML = ''; // Clear previous content
             scannedProducts.forEach(product => {
                 const newRow = document.createElement('tr');
-                newRow.innerHTML = `<td>${product.product_name}</td><td>${product.store_name}</td><td>₱${parseFloat(product.price).toFixed(2)}</td>`;
-                receiptTableBody.appendChild(newRow);
+                newRow.innerHTML = `<td>${product.product_name}</td><td>${product.store_name}</td><td>₱${parseFloat(product.price).toFixed(2)}</td>`; // Include store_name in the receipt
+                receiptTable.appendChild(newRow);
             });
 
+            // Update the total price in the receipt
             document.getElementById('receipt-total-price').innerText = totalPrice.toFixed(2);
-            window.print(); // Trigger print dialog
+
+            // Show the receipt section
+            document.getElementById('receipt').style.display = 'block';
+
+            // Trigger the print
+            window.print();
+
+            // Hide the receipt section after printing
+            document.getElementById('receipt').style.display = 'none';
+        }
+
+      function saveToSession() {
+    if (scannedProducts.length === 0) {
+        alert('No products to save.');
+        return;
+    }
+
+    // Create a query string from the scanned products
+    const productData = scannedProducts.map(product => {
+        return `product_name=${encodeURIComponent(product.product_name)}&store_name=${encodeURIComponent(product.store_name)}&price=${encodeURIComponent(product.price)}`;
+    }).join('&');
+
+    // Redirect with the product data as URL parameters
+    window.location.href = `http://192.168.100.70:8000/teller_Addcart?${productData}`; // Use a single ?
+}
+
+
+        function speak(text) {
+            const speech = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(speech);
         }
     </script>
 </body>
