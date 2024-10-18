@@ -6,13 +6,16 @@
     <title>QR Code Scanner / Reader</title>
     <script src="html5-qrcode.min.js"></script>
     <style>
-
-			.x {
-			min-height: 66vh;
-            max-height: 66vh;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: #B1D8B7;
+            font-family: Arial, sans-serif;
         }
 
         .container {
@@ -20,6 +23,9 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 20px 25px rgba(0, 0, 0, 0.25);
+            min-height: 90vh;
+        max-height: 90vh;
+        overflow-y: auto;
             text-align: center;
         }
 
@@ -36,6 +42,8 @@
         }
 
         .col {
+            width: 100%;
+            max-width: 48%;
             padding: 10px;
         }
 
@@ -63,6 +71,7 @@
         }
 
         table {
+            width: 100%;
             margin-bottom: 20px;
             border-collapse: collapse;
         }
@@ -125,6 +134,7 @@
             }
 
             table {
+                width: 100%;
                 border-collapse: collapse;
                 margin-bottom: 20px;
             }
@@ -136,10 +146,9 @@
     </style>
 </head>
 <body>
-<div class="x">
     <div class="container"><br><br>
         <h1 style="color: #4B5A20;">BERNA QR-Scanner</h1>
-        <p style="margin-top: -10px;">for <strong style="color: #787D12;">Products</strong></p>
+        <p style="margin-top: -10px;">for <strong style="color: #787D12;">Productyss</strong></p>
         <div class="row">
             <div class="col">
                 <div id="my-qr-reader"></div>
@@ -290,6 +299,5 @@ function saveToSession() {
             window.speechSynthesis.speak(speech);
         }
     </script>
-	</div>
 </body>
 </html>
